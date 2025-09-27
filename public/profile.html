@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Your Simon Says Profile</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="profile-container">
+    <h2>Welcome, <span id="username"></span>!</h2>
+    <div class="profile-info">
+      <p><strong>Email:</strong> <span id="email"></span></p>
+      <p><strong>High Score:</strong> <span id="highScore"></span></p>
+      <p><strong>Games Played:</strong> <span id="gamesPlayed"></span></p>
+    </div>
+    <div class="profile-actions">
+      <button onclick="window.location.href='index.html'">Play Game</button>
+      <button id="logoutBtn">Logout</button>
+    </div>
+    <div id="profileError" class="error"></div>
+  </div>
+  <script>
+    async function fetchProfile() {
+      const res = await fetch('/auth/profile');
+      if (res.ok) {
+        const data = await res.json();
+        document.getElementById('username').textContent = data.user.username;
+        document.getElementById('email').textContent = data.user.email;
+        document.getElementById('highScore').textContent = data.user.highScore ?? 0;
+        document.getElementById('gamesPlayed').textContent = data.user.gamesPlayed ?? 0;
+      } else {
+        window.location.href = 'login.html';
+      }
+    }
+
+    document.getElementById('logoutBtn').onclick = async () => {
+      await fetch('/auth/logout');
+      window.location.href = 'login.html';
+    };
+
+    fetchProfile();
+  </script>
+</body>
+</html>

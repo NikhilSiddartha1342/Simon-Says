@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simon Says Leaderboard</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <div class="leaderboard-container">
+    <h2>🏆 Simon Says Leaderboard</h2>
+    <table id="leaderboardTable">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Username</th>
+          <th>High Score</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- JS inserts leaderboard rows here -->
+      </tbody>
+    </table>
+    <button onclick="window.location.href='index.html'">Back to Game</button>
+  </div>
+  <script>
+    async function loadLeaderboard() {
+      const res = await fetch('/leaderboard');
+      const data = await res.json();
+      const tbody = document.querySelector('#leaderboardTable tbody');
+      tbody.innerHTML = '';
+      if (data.leaderboard && data.leaderboard.length) {
+        data.leaderboard.forEach((user, i) => {
+          const row = `<tr>
+            <td>${i + 1}</td>
+            <td>${user.username}</td>
+            <td>${user.highScore}</td>
+          </tr>`;
+          tbody.innerHTML += row;
+        });
+      } else {
+        tbody.innerHTML = '<tr><td colspan="3">No scores yet!</td></tr>';
+      }
+    }
+    loadLeaderboard();
+  </script>
+</body>
+</html>
