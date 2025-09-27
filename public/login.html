@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Simon Says - Login</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body class="auth-bg">
+  <div class="auth-container">
+    <h2>Login to Simon Says</h2>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email" required>
+      <input type="password" id="password" placeholder="Password" required>
+      <button type="submit">Login</button>
+      <p class="switch-link">Don't have an account? <a href="signup.html">Sign up</a></p>
+      <div id="errorMsg" class="error"></div>
+    </form>
+  </div>
+  <script>
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value;
+      const password = document.getElementById('password').value;
+      const res = await fetch('/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (res.ok) {
+        window.location.href = "profile.html";
+      } else {
+        document.getElementById('errorMsg').innerText = data.errors?.join(', ') || 'Login failed';
+      }
+    });
+  </script>
+</body>
+</html>
